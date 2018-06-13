@@ -25,6 +25,7 @@
     <servlet>
         <servlet-name>springmvc</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <!-- springmvc上下文 -->
         <init-param>
             <param-name>contextConfigLocation</param-name>
             <param-value>/WEB-INF/configs/spring-servlet.xml</param-value>

@@ -5,6 +5,8 @@
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker3.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker3.standalone.css" rel="stylesheet">
     <style>
         .container-fluid {
             background: #f7f7f7;
@@ -49,8 +51,7 @@
             <div class="form-group form-row">
                 <label for="birthday" class="col-1 col-form-label">生日</label>
                 <div class="col-4">
-                    <input type="text" class="form-control" id="birthday" name="birthday"
-                           value="${employee.birthday?string('yyyy-MM-dd HH:mm:ss')}">
+                    <input type="text" class="form-control" id="birthday" name="birthday">
                 </div>
                 <label for="race" class="col-1 col-form-label">民族</label>
                 <div class="col-4">
@@ -115,20 +116,22 @@
                 </div>
                 <label for="postCode" class="col-1 col-form-label">邮编</label>
                 <div class="col-4">
-                    <input type="text" class="form-control" readonly id="postCode" name="postCode" value="${employee.postCode}">
+                    <input type="text" class="form-control" id="postCode" name="postCode" value="${employee.postCode}">
                 </div>
             </div>
             <div class="form-group form-row">
-                <label for="jobName" class="col-1 col-form-label">部门名称</label>
+                <label for="deptId" class="col-1 col-form-label">部门</label>
                 <div class="col-4">
-                    <input type="text" class="form-control" id="jobName" name="deptName" value="${employee.dept.name}">
+                    <select class="col-12 form-control" id="dept.id" name="dept.id">
+                    </select>
                 </div>
-                <label for="deptName" class="col-1 col-form-label">职位名称</label>
+                <label for="jobId" class="col-1 col-form-label">职位</label>
                 <div class="col-4">
-                    <input type="text" class="form-control" id="deptName" name="jobName" value="${employee.job.name}">
+                    <select class="col-12 form-control" id="job.id" name="job.id">
+                    </select>
                 </div>
             </div>
-                <div class="form-group form-row">
+            <div class="form-group form-row">
                 <label for="remark" class="col-1 col-form-label">remark</label>
                 <div class="col-4">
                     <input type="text" class="form-control" id="remark" name="remark" value="${employee.remark}">
@@ -152,4 +155,43 @@
 <script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
+<script src="https://cdn.bootcss.com/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap-datepicker/1.8.0/locales/bootstrap-datepicker.zh-CN.min.js"></script>
+<script>
+    $('#birthday').datepicker({
+        language: "zh-CN", // 语言选择中文
+        format: "yyyy-mm-dd", // 格式化日期
+        autoclose: 1 // 选择完日期后，弹出框自动关闭
+        /*timepicker: true, // 关闭时间选项
+        yearEnd: 2050, // 设置最大年份
+        todayButton: false, // 关闭选择今天按钮
+        startView: 3, // 打开弹出框时，显示到什么格式，3代表月
+        minView: 3 // 能选择到的最小日期格式*/
+    });
+    
+    // 基本路径
+    basePath = '${basePath}';
+
+    // 加载列表数据
+    $.get(basePath + '/dept/list', {pageIndex: 1, pageSize: 1000}, function (data) {
+        var obj = document.getElementById("dept.id");
+        // 列表数据
+        var list = data.pageList;
+        // 遍历列表
+        for (var index = 0; index < list.length; index++) {
+            obj.add(new Option(list[index].name,list[index].id));
+        }
+    }, 'json');
+
+    // 加载列表数据
+    $.get(basePath + '/job/list', {pageIndex: 1, pageSize: 1000}, function (data) {
+        var obj = document.getElementById("job.id");
+        // 列表数据
+        var list = data.pageList;
+        // 遍历列表
+        for (var index = 0; index < list.length; index++) {
+            obj.add(new Option(list[index].name, list[index].id));
+        }
+    }, 'json')
+</script>
 </html>
